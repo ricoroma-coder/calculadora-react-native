@@ -7,28 +7,44 @@ import Display from './src/components/Display'
 export default function App() {
 
   const [value, setValue] = useState(0)
+  const [operation, setOp] = useState('')
+
+  const addDigit = n => {
+    if (value == 0 && value.toString().length == 1) {
+        if (n == '.') setValue(value + n.toString())
+        else setValue(n)
+    } else setValue(value + n.toString())
+  }
+
+  const clearMemory = () => {
+    setValue(0)
+  }
+
+  const setOperation = operation => {
+    setOp(operation)
+  }
 
   return (
     <View style={styles.container}>
       <Display value={value} />
       <View style={styles.buttons}>
-        <Button label='AC' />
-        <Button label='/' />
-        <Button label='7' />
-        <Button label='8' />
-        <Button label='9' />
-        <Button label='*' />
-        <Button label='4' />
-        <Button label='5' />
-        <Button label='6' />
-        <Button label='-' />
-        <Button label='1' />
-        <Button label='2' />
-        <Button label='3' />
-        <Button label='+' />
-        <Button label='0' />
-        <Button label='.' />
-        <Button label='=' />
+        <Button label='AC' triple onClick={clearMemory} />
+        <Button label='/' operation onClick={setOperation} />
+        <Button label='7' onClick={addDigit} />
+        <Button label='8' onClick={addDigit} />
+        <Button label='9' onClick={addDigit} />
+        <Button label='*' operation onClick={setOperation} />
+        <Button label='5' onClick={addDigit} />
+        <Button label='6' onClick={addDigit} />
+        <Button label='4' onClick={addDigit} />
+        <Button label='-' operation onClick={setOperation} />
+        <Button label='1' onClick={addDigit} />
+        <Button label='2' onClick={addDigit} />
+        <Button label='3' onClick={addDigit} />
+        <Button label='+' operation onClick={setOperation} />
+        <Button label='0' double onClick={addDigit} />
+        <Button label='.' onClick={addDigit} />
+        <Button label='=' operation onClick={setOperation} />
       </View>
     </View>
   );
