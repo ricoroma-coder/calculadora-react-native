@@ -5,19 +5,36 @@ import Button from './src/components/Button'
 import Display from './src/components/Display'
 
 export default function App() {
-
-  const [value, setValue] = useState(0)
-  const [operation, setOp] = useState('')
+  const [displayValue, setDisplayValue] = useState(0)
+  const [clearDisplay, setClearDisplay] = useState(false)
+  const [operation, setOp] = useState(null)
+  const [numbers, setNumber] = useState([0,0])
+  const [current, setCurrent] = useState(0)
 
   const addDigit = n => {
-    if (value == 0 && value.toString().length == 1) {
-        if (n == '.') setValue(value + n.toString())
-        else setValue(n)
-    } else setValue(value + n.toString())
+    if (n === '.' && displayValue.includes('.')) return
+    if (n == 0 && displayValue == 0) return
+
+    const clear = displayValue === '0' || clearDisplay
+    const currentValue = clear ? '' : displayValue
+    const newDisplayValue = currentValue + n
+    setDisplayValue(newDisplayValue)
+    setClearDisplay(false)
+
+    if (n !== '.') {
+        const newValue = parseFloat(newDisplayValue)
+        const values = numbers
+        values[current] = newValue
+        setNumber(values)
+    }
   }
 
   const clearMemory = () => {
-    setValue(0)
+    setDisplayValue(0)
+    setClearDisplay(false)
+    setOp(null)
+    setNumber([0,0])
+    setCurrent(0)
   }
 
   const setOperation = operation => {
@@ -26,7 +43,7 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <Display value={value} />
+      <Display value={displayValue} />
       <View style={styles.buttons}>
         <Button label='AC' triple onClick={clearMemory} />
         <Button label='/' operation onClick={setOperation} />
