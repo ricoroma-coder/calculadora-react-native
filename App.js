@@ -17,7 +17,7 @@ export default function App() {
 
     const clear = displayValue === '0' || clearDisplay
     const currentValue = clear ? '' : displayValue
-    const newDisplayValue = currentValue + n
+    const newDisplayValue = displayValue === 0 ? n : currentValue + n
     setDisplayValue(newDisplayValue)
     setClearDisplay(false)
 
@@ -37,8 +37,28 @@ export default function App() {
     setCurrent(0)
   }
 
-  const setOperation = operation => {
-    setOp(operation)
+  const setOperation = op => {
+    if (current == 0) {
+       setOp(op)
+       setCurrent(1)
+       setClearDisplay(true)
+    } else {
+        const equals = op === '='
+        const values = numbers
+        try {
+            values[0] = eval(values[0] + operation + values[1])
+        } catch (e) {
+           values[0] = numbers[0]
+        }
+
+        values[1] = 0
+        setDisplayValue(values[0])
+        setOp(equals ? null : op)
+        setCurrent(equals ? 0 : 1)
+        //setClearDisplay(!equals)
+        setClearDisplay(true)
+        setNumber(values)
+    }
   }
 
   return (
@@ -51,9 +71,9 @@ export default function App() {
         <Button label='8' onClick={addDigit} />
         <Button label='9' onClick={addDigit} />
         <Button label='*' operation onClick={setOperation} />
+        <Button label='4' onClick={addDigit} />
         <Button label='5' onClick={addDigit} />
         <Button label='6' onClick={addDigit} />
-        <Button label='4' onClick={addDigit} />
         <Button label='-' operation onClick={setOperation} />
         <Button label='1' onClick={addDigit} />
         <Button label='2' onClick={addDigit} />
