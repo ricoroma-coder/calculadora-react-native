@@ -12,12 +12,16 @@ export default function App() {
   const [current, setCurrent] = useState(0)
 
   const addDigit = n => {
-    if (n === '.' && displayValue.includes('.')) return
     if (n == 0 && displayValue == 0) return
 
     const clear = displayValue === '0' || clearDisplay
+
+    if (n === '.' && !clear && displayValue.toString().includes('.')) return
+
     const currentValue = clear ? '' : displayValue
-    const newDisplayValue = displayValue === 0 ? n : currentValue + n
+    const newDisplayValue = currentValue === 0 && n != '.'
+        ? n
+        : currentValue + n
     setDisplayValue(newDisplayValue)
     setClearDisplay(false)
 
